@@ -23,6 +23,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('su/',su.index),
+
+    #admin login from admin panel or django admin
     path('su/login',su.login),
     #product routing
     path('su/add/products',su.add_product),
