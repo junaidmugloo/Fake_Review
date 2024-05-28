@@ -30,7 +30,7 @@ def category(res):
         'dict': cat
         }
         return render(res,'category.html',context=dict);
-
+#delete category
 def category_delete(res,id):
     cat=Category.objects.get(id=id)
     cat.delete()
