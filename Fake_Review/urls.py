@@ -22,5 +22,6 @@ from su_frontend import views
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('su/',su.index)
+    path('su/',su.index),
+    path('su/login',su.login),
 ]
