@@ -24,4 +24,12 @@ urlpatterns = [
 
     path('su/',su.index),
     path('su/login',su.login),
+    #product routing
+    path('su/add/products',su.add_product),
+    path('su/view/products',su.view_product),
+    # category routing
+    path('su/category',su.category),
+    path('su/category/delete/<id>',su.category_delete),
+   
+
 ]
