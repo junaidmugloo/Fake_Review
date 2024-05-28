@@ -10,3 +10,4 @@ class Products(models.Model):
      category = models.CharField(max_length=100)
      selling_price = models.CharField(max_length=100)
      mrp = models.CharField(max_length=100)
+

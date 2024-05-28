@@ -70,41 +70,30 @@
               <div class="card-body px-5 pb-5 pt-0">
                 <h4 class="text-dark mb-6 text-center">Sign in for free</h4>
 
-                <form action="/index.html">
+                <form id="login_form" method="POST">
                   {% csrf_token %}
                   <div class="row">
                     <div class="form-group col-md-12 mb-4">
                       <input
-                        type="email"
+                        type="text"
                         class="form-control input-lg"
                         id="email"
                         aria-describedby="emailHelp"
-                        placeholder="email"
+                        placeholder="Username"
+                        name="username"
                       />
                     </div>
                     <div class="form-group col-md-12">
                       <input
                         type="password"
+                        name="password"
                         class="form-control input-lg"
                         id="password"
                         placeholder="Password"
                       />
                     </div>
                     <div class="col-md-12">
-                      <div class="d-flex justify-content-between mb-3">
-                        <div class="custom-control custom-checkbox mr-3 mb-3">
-                          <input
-                            type="checkbox"
-                            class="custom-control-input"
-                            id="customCheck2"
-                          />
-                          <label class="custom-control-label" for="customCheck2"
-                            >Remember me</label
-                          >
-                        </div>
-
-                        <a class="text-color" href="#"> Forgot password? </a>
-                      </div>
+                     
 
                       <button
                         type="submit"
@@ -113,10 +102,7 @@
                         Sign In
                       </button>
 
-                      <p>
-                        Don't have an account yet ?
-                        <a class="text-blue" href="sign-up.html">Sign Up</a>
-                      </p>
+                      <p class="text-danger" id="msg"></p>
                     </div>
                   </div>
                 </form>
@@ -126,5 +112,44 @@
         </div>
       </div>
     </div>
+
+
+
+
+    <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function () {                 
+            $('#login_form').submit(function (event) { 
+                event.preventDefault();                 
+                var form = document.getElementById('login_form'); 
+                var formData = new FormData(form); 
+               
+                $.ajax({ 
+                    url: '/su/login', 
+                    method: 'POST', 
+                    data: formData, 
+                    processData: false, 
+                    contentType: false, 
+                    success: function (response) {                       
+                      if(response.message=="Found")
+                        window.location.href="/su";
+                        else
+                        $('#msg').html(response.message)
+                    }, 
+                    
+                    error: function (xhr, status, error) {                        
+                        Swal.fire({
+                            icon: "Error",
+                            title: "Oops...",
+                            text: "Something went wrong!",
+                           
+                          });
+                        console.error(error); 
+                    } 
+                }); 
+            }); 
+        }); 
+    </script>
   </body>
 </html>
