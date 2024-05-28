@@ -1,11 +1,12 @@
 {% load static %}
+{% if  user.is_authenticated %}
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Mono - Responsive Admin &amp; Dashboard Template</title>
+    <title>Category</title>
 
     <!-- GOOGLE FONTS -->
     <link
@@ -28,6 +29,11 @@
     />
 
     <link href="{% static 'plugins/prism/prism.css' %}" rel="stylesheet" />
+
+    <link
+      href="{% static 'plugins/DataTables/DataTables-1.10.18/css/jquery.dataTables.min.css' %}"
+      rel="stylesheet"
+    />
 
     <!-- MONO CSS -->
     <link
@@ -80,616 +86,41 @@
         <div class="content-wrapper">
           <div class="content">
             <!-- For Components documentaion -->
-            <div class="card card-default">
-              <div class="px-6 py-4">
-                <p>
-                  Mono provides a variety of
-                  <span class="text-secondary text-capitalize">
-                    Bootstrap Forms Validation
-                  </span>
-                  components with a little customization that suits its design
-                  standards. For more information, please see the official
-                  <a
-                    class="font-weight-bold"
-                    href="https://getbootstrap.com/docs/4.3/components/forms/#validation"
-                    target="_blank"
-                  >
-                    Bootstrap documentation.</a
-                  >
-                </p>
-              </div>
+           <div class="card mb-4">
+            <div class="card-body row">
+                <div class="col form-group ">
+                    <form id="product_form"  method="post">
+                        {% csrf_token %}
+                    <label for="s">Product Name</label>
+                    <input type="text" name="name" class="form-control mb-2" required placeholder="Category Name">
+                    
+                    <label for="s">Product Description</label>
+                    <input type="text" name="description" class="form-control mb-2" required placeholder="Category Name">
+                   
+                    <label for="s">Product Category</label>
+                    <select name="category" class="form-control mb-2" id="">
+                      <option value="" class="text-muted">Select Category</option>
+                      {% for value in dict %}
+                      <option value="{{value.name}}" class="text-muted">{{value.name}}</option>
+                      {% endfor %}
+                    </select>
+                    <label for="s">Product Price</label>
+                    <input type="number" name="price" class="form-control mb-2" required placeholder="Category Name">
+                   
+                    <label for="s">Product MRP</label>
+                    <input type="number" name="mrp" class="form-control mb-2" required placeholder="Category Name">
+                   
+                    <label for="s">Product Image</label>
+                    <input type="file" name="image" class="form-control mb-2" required placeholder="Category Name">
+                   
+                    <input type="submit" value="Add Product" class="btn btn-primary mt-2">
+                </form>
+                </div>
             </div>
+           </div>
 
-            <div class="row">
-              <div class="col-xl-6">
-                <!-- Basic Checkbox -->
-                <div class="card card-default">
-                  <div class="card-header">
-                    <h2>Basic Checkbox</h2>
-
-                    <a
-                      class="btn mdi mdi-code-tags"
-                      data-toggle="collapse"
-                      href="#collapse-from-validation"
-                      role="button"
-                      aria-expanded="false"
-                      aria-controls="collapse-from-validation"
-                    >
-                    </a>
-                  </div>
-                  <div class="card-body">
-                    <div class="collapse" id="collapse-from-validation">
-                      <pre class="language-html mb-4"><code>
-&lt;form&gt;
-  &lt;div class="form-row"&gt;
-    &lt;div class="col-md-12 mb-3"&gt;
-      &lt;label for="validationServer01"&gt;Input with success&lt;/label&gt;
-      &lt;input type="text" class="form-control border-success" id="validationServer01" placeholder="First name" required&gt;
-      &lt;div class="text-success small mt-1"&gt;
-        Looks good!
-      &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div class="col-md-12 mb-3"&gt;
-      &lt;label for="validationServer02"&gt;Input with info&lt;/label&gt;
-      &lt;input type="text" class="form-control border-info" id="validationServer02" placeholder="Last name"
-        value="Last Name" required&gt;
-      &lt;div class="text-info small mt-1"&gt;
-        We'll never share your email with anyone else.
-      &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div class="col-md-12 mb-3"&gt;
-      &lt;label for="validationServer02"&gt;Input with warning&lt;/label&gt;
-      &lt;input type="text" class="form-control border-warning" id="validationServer02" placeholder="Last name"
-        value="Last Name" required&gt;
-      &lt;div class="text-warning small mt-1"&gt;
-        Shucks, check the formatting of that and try again.
-      &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div class="col-md-12 mb-3"&gt;
-      &lt;label for="validationServer02"&gt;Input with danger&lt;/label&gt;
-      &lt;input type="text" class="form-control border-danger" id="validationServer02" placeholder="Last name"
-        value="Last Name" required&gt;
-      &lt;div class="text-daborder-danger small mt-1"&gt;
-        Sorry, that username's taken. Try another?
-      &lt;/div&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-  &lt;button class="btn btn-primary btn-pill mr-2" type="submit"&gt;Submit&lt;/button&gt;
-  &lt;button class="btn btn-light btn-pill" type="submit"&gt;Cancel&lt;/button&gt;
-&lt;/form&gt;
-</code>
-          </pre>
-                    </div>
-
-                    <form>
-                      {% csrf_token %}
-                      <div class="form-row">
-                        <div class="col-md-12 mb-3">
-                          <label for="validationServer01"
-                            >Input with success</label
-                          >
-                          <input
-                            type="text"
-                            class="form-control border-success"
-                            id="validationServer01"
-                            placeholder="First name"
-                            required=""
-                          />
-                          <div class="text-success small mt-1">Looks good!</div>
-                        </div>
-                        <div class="col-md-12 mb-3">
-                          <label for="validationServer02"
-                            >Input with info</label
-                          >
-                          <input
-                            type="text"
-                            class="form-control border-info"
-                            id="validationServer02"
-                            placeholder="Last name"
-                            value="Last Name"
-                            required=""
-                          />
-                          <div class="text-info small mt-1">
-                            We'll never share your email with anyone else.
-                          </div>
-                        </div>
-                        <div class="col-md-12 mb-3">
-                          <label for="validationServer02"
-                            >Input with warning</label
-                          >
-                          <input
-                            type="text"
-                            class="form-control border-warning"
-                            id="validationServer02"
-                            placeholder="Last name"
-                            value="Last Name"
-                            required=""
-                          />
-                          <div class="text-warning small mt-1">
-                            Shucks, check the formatting of that and try again.
-                          </div>
-                        </div>
-                        <div class="col-md-12 mb-3">
-                          <label for="validationServer02"
-                            >Input with danger</label
-                          >
-                          <input
-                            type="text"
-                            class="form-control border-danger"
-                            id="validationServer02"
-                            placeholder="Last name"
-                            value="Last Name"
-                            required=""
-                          />
-                          <div class="text-daborder-danger small mt-1">
-                            Sorry, that username's taken. Try another?
-                          </div>
-                        </div>
-                      </div>
-                      <button
-                        class="btn btn-primary btn-pill mr-2"
-                        type="submit"
-                      >
-                        Submit
-                      </button>
-                      <button class="btn btn-light btn-pill" type="submit">
-                        Cancel
-                      </button>
-                    </form>
-                  </div>
-                </div>
-
-                <!-- Iconic Validation -->
-                <div class="card card-default">
-                  <div class="card-header">
-                    <h2>Iconic Validation</h2>
-
-                    <a
-                      class="btn mdi mdi-code-tags"
-                      data-toggle="collapse"
-                      href="#collapse-form-validation-iconic"
-                      role="button"
-                      aria-expanded="false"
-                      aria-controls="collapse-form-validation-iconic"
-                    >
-                    </a>
-                  </div>
-                  <div class="card-body">
-                    <div class="collapse" id="collapse-form-validation-iconic">
-                      <pre class="language-html mb-4"><code>
-&lt;form&gt;
-  &lt;div class="mb-5"&gt;
-    &lt;label for="validationServer01"&gt;Left Addon&lt;/label&gt;
-    &lt;div class="input-group"&gt;
-      &lt;div class="input-group-prepend"&gt;
-        &lt;span class="input-group-text" id="basic-addon1"&gt;@&lt;/span&gt;
-      &lt;/div&gt;
-      &lt;input type="text" class="form-control" placeholder="Username" aria-label="Username"
-        aria-describedby="basic-addon1"&gt;
-    &lt;/div&gt;
-    &lt;div class="text-success small mt-1"&gt;
-      Looks good!
-    &lt;/div&gt;
-  &lt;/div&gt;
-
-  &lt;div class="mb-5"&gt;
-    &lt;label for="validationServer01"&gt;Right Addon&lt;/label&gt;
-    &lt;div class="input-group"&gt;
-      &lt;input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username"
-        aria-describedby="basic-addon2"&gt;
-      &lt;div class="input-group-append"&gt;
-        &lt;span class="input-group-text" id="basic-addon2"&gt;@example.com&lt;/span&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div class="text-warning small mt-1"&gt;
-      Shucks, check the formatting of that and try again.
-    &lt;/div&gt;
-  &lt;/div&gt;
-
-  &lt;div class="mb-5"&gt;
-    &lt;label for="validationServer01"&gt;Input with danger&lt;/label&gt;
-    &lt;div class="input-group"&gt;
-      &lt;div class="input-group-prepend"&gt;
-        &lt;span class="input-group-text"&gt;$&lt;/span&gt;
-      &lt;/div&gt;
-      &lt;input type="text" class="form-control" aria-label="Amount (to the nearest dollar)"&gt;
-      &lt;div class="input-group-append"&gt;
-        &lt;span class="input-group-text"&gt;.00&lt;/span&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div class="text-danger small mt-1"&gt;
-      Sorry, that username's taken. Try another?
-    &lt;/div&gt;
-  &lt;/div&gt;
-
-  &lt;button class="btn btn-primary btn-pill mr-2" type="submit"&gt;Submit&lt;/button&gt;
-  &lt;button class="btn btn-light btn-pill" type="submit"&gt;Cancel&lt;/button&gt;
-&lt;/form&gt;
-</code>
-          </pre>
-                    </div>
-
-                    <form>
-                      {% csrf_token %}
-                      <div class="mb-5">
-                        <label for="validationServer01">Left Addon</label>
-                        <div class="input-group">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1"
-                              >@</span
-                            >
-                          </div>
-                          <input
-                            type="text"
-                            class="form-control"
-                            placeholder="Username"
-                            aria-label="Username"
-                            aria-describedby="basic-addon1"
-                          />
-                        </div>
-                        <div class="text-success small mt-1">Looks good!</div>
-                      </div>
-
-                      <div class="mb-5">
-                        <label for="validationServer01">Right Addon</label>
-                        <div class="input-group">
-                          <input
-                            type="text"
-                            class="form-control"
-                            placeholder="Recipient's username"
-                            aria-label="Recipient's username"
-                            aria-describedby="basic-addon2"
-                          />
-                          <div class="input-group-append">
-                            <span class="input-group-text" id="basic-addon2"
-                              >@example.com</span
-                            >
-                          </div>
-                        </div>
-                        <div class="text-warning small mt-1">
-                          Shucks, check the formatting of that and try again.
-                        </div>
-                      </div>
-
-                      <div class="mb-5">
-                        <label for="validationServer01"
-                          >Input with danger</label
-                        >
-                        <div class="input-group">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text">$</span>
-                          </div>
-                          <input
-                            type="text"
-                            class="form-control"
-                            aria-label="Amount (to the nearest dollar)"
-                          />
-                          <div class="input-group-append">
-                            <span class="input-group-text">.00</span>
-                          </div>
-                        </div>
-                        <div class="text-danger small mt-1">
-                          Sorry, that username's taken. Try another?
-                        </div>
-                      </div>
-
-                      <button
-                        class="btn btn-primary btn-pill mr-2"
-                        type="submit"
-                      >
-                        Submit
-                      </button>
-                      <button class="btn btn-light btn-pill" type="submit">
-                        Cancel
-                      </button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xl-6">
-                <!-- Horizontal Validation -->
-                <div class="card card-default">
-                  <div class="card-header">
-                    <h2>Horizontal Validation</h2>
-
-                    <a
-                      class="btn mdi mdi-code-tags"
-                      data-toggle="collapse"
-                      href="#collapse-horizontal-validation"
-                      role="button"
-                      aria-expanded="false"
-                      aria-controls="collapse-horizontal-validation"
-                    >
-                    </a>
-                  </div>
-                  <div class="card-body">
-                    <div class="collapse" id="collapse-horizontal-validation">
-                      <pre class="language-html mb-4"><code>
-&lt;form&gt;
-  &lt;div class="form-group row mb-6"&gt;
-    &lt;label for="staticEmail" class="col-sm-4 col-form-label"&gt;Input with success&lt;/label&gt;
-    &lt;div class="col-sm-8"&gt;
-      &lt;input type="text" class="form-control border-success" id="validationServer01" placeholder="First name" required&gt;
-      &lt;div class="text-success small mt-1"&gt;
-        Looks good!
-      &lt;/div&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-
-  &lt;div class="form-group row mb-6"&gt;
-    &lt;label for="staticEmail" class="col-sm-4 col-form-label"&gt;Input with info&lt;/label&gt;
-    &lt;div class="col-sm-8"&gt;
-      &lt;input type="text" class="form-control border-info" id="validationServer01" placeholder="First name" required&gt;
-      &lt;div class="text-info small mt-1"&gt;
-        Looks good!
-      &lt;/div&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-
-  &lt;div class="form-group row mb-6"&gt;
-    &lt;label for="staticEmail" class="col-sm-4 col-form-label"&gt;Input with warning&lt;/label&gt;
-    &lt;div class="col-sm-8"&gt;
-      &lt;input type="text" class="form-control border-warning" id="validationServer01" placeholder="First name" required&gt;
-      &lt;div class="text-warning small mt-1"&gt;
-        Looks good!
-      &lt;/div&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-
-  &lt;div class="form-group row mb-6"&gt;
-    &lt;label for="staticEmail" class="col-sm-4 col-form-label"&gt;Input with danger&lt;/label&gt;
-    &lt;div class="col-sm-8"&gt;
-      &lt;input type="text" class="form-control border-danger" id="validationServer01" placeholder="First name" required&gt;
-      &lt;div class="text-danger small mt-1"&gt;
-        Looks good!
-      &lt;/div&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-
-  &lt;button class="btn btn-primary btn-pill mr-2" type="submit"&gt;Submit&lt;/button&gt;
-  &lt;button class="btn btn-light btn-pill" type="submit"&gt;Cancel&lt;/button&gt;
-&lt;/form&gt;
-</code>
-          </pre>
-                    </div>
-
-                    <form>
-                      {% csrf_token %}
-                      <div class="form-group row mb-6">
-                        <label for="staticEmail" class="col-sm-4 col-form-label"
-                          >Input with success</label
-                        >
-                        <div class="col-sm-8">
-                          <input
-                            type="text"
-                            class="form-control border-success"
-                            id="validationServer01"
-                            placeholder="First name"
-                            required=""
-                          />
-                          <div class="text-success small mt-1">Looks good!</div>
-                        </div>
-                      </div>
-
-                      <div class="form-group row mb-6">
-                        <label for="staticEmail" class="col-sm-4 col-form-label"
-                          >Input with info</label
-                        >
-                        <div class="col-sm-8">
-                          <input
-                            type="text"
-                            class="form-control border-info"
-                            id="validationServer01"
-                            placeholder="First name"
-                            required=""
-                          />
-                          <div class="text-info small mt-1">Looks good!</div>
-                        </div>
-                      </div>
-
-                      <div class="form-group row mb-6">
-                        <label for="staticEmail" class="col-sm-4 col-form-label"
-                          >Input with warning</label
-                        >
-                        <div class="col-sm-8">
-                          <input
-                            type="text"
-                            class="form-control border-warning"
-                            id="validationServer01"
-                            placeholder="First name"
-                            required=""
-                          />
-                          <div class="text-warning small mt-1">Looks good!</div>
-                        </div>
-                      </div>
-
-                      <div class="form-group row mb-6">
-                        <label for="staticEmail" class="col-sm-4 col-form-label"
-                          >Input with danger</label
-                        >
-                        <div class="col-sm-8">
-                          <input
-                            type="text"
-                            class="form-control border-danger"
-                            id="validationServer01"
-                            placeholder="First name"
-                            required=""
-                          />
-                          <div class="text-danger small mt-1">Looks good!</div>
-                        </div>
-                      </div>
-
-                      <button
-                        class="btn btn-primary btn-pill mr-2"
-                        type="submit"
-                      >
-                        Submit
-                      </button>
-                      <button class="btn btn-light btn-pill" type="submit">
-                        Cancel
-                      </button>
-                    </form>
-                  </div>
-                </div>
-
-                <!-- Button Addons Validation -->
-                <div class="card card-default">
-                  <div class="card-header">
-                    <h2>Button Addons Validation</h2>
-
-                    <a
-                      class="btn mdi mdi-code-tags"
-                      data-toggle="collapse"
-                      href="#collapse-button-addons-validation"
-                      role="button"
-                      aria-expanded="false"
-                      aria-controls="collapse-button-addons-validation"
-                    >
-                    </a>
-                  </div>
-                  <div class="card-body">
-                    <div
-                      class="collapse"
-                      id="collapse-button-addons-validation"
-                    >
-                      <pre class="language-html mb-4"><code>
-&lt;form&gt;
-  &lt;div class="mb-5"&gt;
-    &lt;label for="validationServer01"&gt;Left Addon&lt;/label&gt;
-    &lt;div class="input-group"&gt;
-      &lt;div class="input-group-prepend"&gt;
-        &lt;button class="btn btn-primary" type="button"&gt;go&lt;/button&gt;
-      &lt;/div&gt;
-      &lt;input type="text" class="form-control" placeholder="Username" aria-label="Username"
-        aria-describedby="basic-addon1"&gt;
-    &lt;/div&gt;
-    &lt;div class="text-success small mt-1"&gt;
-      Looks good!
-    &lt;/div&gt;
-  &lt;/div&gt;
-
-  &lt;div class="mb-5"&gt;
-    &lt;label for="validationServer01"&gt;Right Addon&lt;/label&gt;
-    &lt;div class="input-group"&gt;
-      &lt;input type="text" class="form-control" placeholder="settings" aria-label="Recipient's username"
-        aria-describedby="basic-addon2" placeholder="Search for..."&gt;
-      &lt;div class="input-group-prepend"&gt;
-        &lt;button class="btn btn-primary" type="button"&gt;go&lt;/button&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-
-    &lt;div class="text-warning small mt-1"&gt;
-      Shucks, check the formatting of that and try again.
-    &lt;/div&gt;
-  &lt;/div&gt;
-
-  &lt;div class="mb-5"&gt;
-    &lt;label for="validationServer01"&gt;Input with danger&lt;/label&gt;
-    &lt;div class="input-group"&gt;
-      &lt;div class="input-group-prepend"&gt;
-        &lt;button class="btn btn-primary" type="button"&gt;go&lt;/button&gt;
-      &lt;/div&gt;
-      &lt;input type="text" class="form-control" aria-label="Amount (to the nearest dollar)"&gt;
-      &lt;div class="input-group-append"&gt;
-        &lt;button class="btn btn-danger" type="button"&gt;go&lt;/button&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div class="text-danger small mt-1"&gt;
-      Sorry, that username's taken. Try another?
-    &lt;/div&gt;
-  &lt;/div&gt;
-
-  &lt;button class="btn btn-primary btn-pill mr-2" type="submit"&gt;Submit&lt;/button&gt;
-  &lt;button class="btn btn-light btn-pill" type="submit"&gt;Cancel&lt;/button&gt;
-
-&lt;/form&gt;
-</code>
-          </pre>
-                    </div>
-
-                    <form>
-                      {% csrf_token %}
-                      <div class="mb-5">
-                        <label for="validationServer01">Left Addon</label>
-                        <div class="input-group">
-                          <div class="input-group-prepend">
-                            <button class="btn btn-primary" type="button">
-                              go
-                            </button>
-                          </div>
-                          <input
-                            type="text"
-                            class="form-control"
-                            placeholder="Username"
-                            aria-label="Username"
-                            aria-describedby="basic-addon1"
-                          />
-                        </div>
-                        <div class="text-success small mt-1">Looks good!</div>
-                      </div>
-
-                      <div class="mb-5">
-                        <label for="validationServer01">Right Addon</label>
-                        <div class="input-group">
-                          <input
-                            type="text"
-                            class="form-control"
-                            placeholder="settings"
-                            aria-label="Recipient's username"
-                            aria-describedby="basic-addon2"
-                          />
-                          <div class="input-group-prepend">
-                            <button class="btn btn-primary" type="button">
-                              go
-                            </button>
-                          </div>
-                        </div>
-
-                        <div class="text-warning small mt-1">
-                          Shucks, check the formatting of that and try again.
-                        </div>
-                      </div>
-
-                      <div class="mb-5">
-                        <label for="validationServer01"
-                          >Input with danger</label
-                        >
-                        <div class="input-group">
-                          <div class="input-group-prepend">
-                            <button class="btn btn-primary" type="button">
-                              go
-                            </button>
-                          </div>
-                          <input
-                            type="text"
-                            class="form-control"
-                            aria-label="Amount (to the nearest dollar)"
-                          />
-                          <div class="input-group-append">
-                            <button class="btn btn-danger" type="button">
-                              go
-                            </button>
-                          </div>
-                        </div>
-                        <div class="text-danger small mt-1">
-                          Sorry, that username's taken. Try another?
-                        </div>
-                      </div>
-
-                      <button
-                        class="btn btn-primary btn-pill mr-2"
-                        type="submit"
-                      >
-                        Submit
-                      </button>
-                      <button class="btn btn-light btn-pill" type="submit">
-                        Cancel
-                      </button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <!-- Products Inventory -->
+            
           </div>
         </div>
 
@@ -846,11 +277,55 @@
 
     <script src="{% static 'plugins/prism/prism.js' %}"></script>
 
+    <script src="{% static 'plugins/DataTables/DataTables-1.10.18/js/jquery.dataTables.min.js' %}"></script>
+
+    <script src="{% static 'plugins/apexcharts/apexcharts.js' %}"></script>
+
     <script src="{% static 'js/mono.js' %}"></script>
     <script src="{% static 'js/chart.js' %}"></script>
     <script src="{% static 'js/map.js' %}"></script>
     <script src="{% static 'js/custom.js' %}"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function () {                 
+            $('#product_form').submit(function (event) { 
+                event.preventDefault();                 
+                var form = document.getElementById('product_form'); 
+                var formData = new FormData(form); 
+               
+                $.ajax({ 
+                    url: '/su/add/products', 
+                    method: 'POST', 
+                    data: formData, 
+                    processData: false, 
+                    contentType: false, 
+                    success: function (response) {                       
+                        Swal.fire({
+                            title: "Done",
+                            text: "Added successfully.!",
+                            icon: "success"
+                          });
+                          window.location.reload();
+                    }, 
+                    error: function (xhr, status, error) {                        
+                        Swal.fire({
+                            icon: "Error",
+                            title: "Oops...",
+                            text: "Something went wrong!",
+                           
+                          });
+                        console.error(error); 
+                    } 
+                }); 
+            }); 
+        }); 
+    </script>
     <!--  -->
   </body>
 </html>
+{% else %}
+<script>
+  window.location.href="/su/login"
+</script>
+
+{% endif %}

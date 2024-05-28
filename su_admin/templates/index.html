@@ -1,4 +1,5 @@
 {% load static %}
+{% if  user.is_authenticated %}
 <html lang="en" dir="ltr">
   <head></head>
   <body class="navbar-fixed sidebar-fixed" id="body">
@@ -1516,4 +1517,11 @@
 
     <!--  -->
   </body>
+ 
+{% else %}
+<script>
+  window.location.href="/su/login"
+</script>
+
+{% endif %}
 </html>
