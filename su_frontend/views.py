@@ -1,9 +1,23 @@
-from django.shortcuts import render
+from django.shortcuts import (render,HttpResponseRedirect)
+import json
+from django.http import HttpResponse
+from pymongo import MongoClient
+from su_admin.models import Category,Products
+from django.contrib.auth.models import User
+from django.contrib.auth import (authenticate,logout)
+from django.contrib.auth import login as cslogin
+
+client = MongoClient('mongodb://localhost:27017/')
+category_db = client['fake_review']
 
 # Create your views here.
 
 def front_index(res):
-    return render(res,"index2.html")
+    cat=Products.objects.all() 
+    dict = {
+        'dict': cat
+        }
+    return render(res,'index2.html',context=dict);
 
 def front_login(res):
     return render(res,"login2.html")
