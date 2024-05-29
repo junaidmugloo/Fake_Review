@@ -41,7 +41,11 @@ urlpatterns = [
 
     #front end routing
      path('', front.front_index, name='front_index'),
-   
+     path('login/', front.front_login, name='front_login'),
+     path('signup/', front.front_signup, name='front_signup'),
+     path('product/detail/', front.product_detail, name='product_detail'),
+     path('shop/', front.product_shop, name='product_shop'),
+     path('contact/', front.product_contact, name='product_contact'),
 
 ]
 
