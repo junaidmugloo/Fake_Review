@@ -47,7 +47,7 @@ def logout_view(res):
 def add_product(res):
     response_data={}
     if res.method=="POST":
-        category_db=Products(name=res.POST['name'],description=res.POST['description'],category=res.POST['category'],selling_price=res.POST['price'],mrp=res.POST['mrp'],image="abc.jpg")
+        category_db=Products(name=res.POST['name'],description=res.POST['description'],category=res.POST['category'],selling_price=res.POST['price'],mrp=res.POST['mrp'],image=res.FILES['image'])
         category_db.save()
         response_data['message'] = 'Added'
         return HttpResponse(json.dumps(response_data), content_type="application/json") 

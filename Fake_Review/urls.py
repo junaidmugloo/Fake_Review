@@ -17,7 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from su_admin import views as su
-from su_frontend import views 
+from su_frontend import views as front
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -35,6 +37,14 @@ urlpatterns = [
     # category routing
     path('su/category',su.category),
     path('su/category/delete/<id>',su.category_delete),
+
+
+    #front end routing
+     path('', front.front_index, name='front_index'),
    
 
 ]
+
+if settings.DEBUG:
+        urlpatterns += static(settings.MEDIA_URL,
+                              document_root=settings.MEDIA_ROOT)

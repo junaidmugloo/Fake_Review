@@ -89,7 +89,7 @@
            <div class="card mb-4">
             <div class="card-body row">
                 <div class="col form-group ">
-                    <form id="product_form"  method="post">
+                    <form id="product_form" enctype="multipart/form-data"  method="post">
                         {% csrf_token %}
                     <label for="s">Product Name</label>
                     <input type="text" name="name" class="form-control mb-2" required placeholder="Category Name">

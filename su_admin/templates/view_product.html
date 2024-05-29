@@ -139,7 +139,7 @@
                     <tr>
                       <td class="py-0">
                         <img
-                          src="{% static 'images/products/products-xs-15.jpg' %}"
+                          src="{{ value.image.url }}"
                           alt="Product Image"
                         />
                       </td>
@@ -168,7 +168,7 @@
                             class="dropdown-menu dropdown-menu-right"
                             aria-labelledby="dropdownMenuLink"
                           >
-                            <a class="dropdown-item" href="">Update</a>
+                            <a class="dropdown-item" href="">View Reviews</a>
                             <a class="dropdown-item" href="/su/products/delete/{{value.id}}">Delete</a>
                            
                           </div>
