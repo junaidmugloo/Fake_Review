@@ -1,0 +1,251 @@
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Aroma Shop - Cart</title>
+    <link rel="icon" href="{% static 'img/Fevicon.png' %}" type="image/png" />
+    <link
+      rel="stylesheet"
+      href="{% static 'vendors2/bootstrap/bootstrap.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'vendors2/fontawesome/css/all.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'vendors2/themify-icons/themify-icons.css' %}"
+    />
+    <link rel="stylesheet" href="{% static 'vendors2/linericon/style.css' %}" />
+    <link
+      rel="stylesheet"
+      href="{% static 'vendors2/owl-carousel/owl.theme.default.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'vendors2/owl-carousel/owl.carousel.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'vendors2/nice-select/nice-select.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'vendors2/nouislider/nouislider.min.css' %}"
+    />
+
+    <link rel="stylesheet" href="{% static 'css2/style.css' %}" />
+  </head>
+  <body>
+    <!--================ Start Header Menu Area =================-->
+   {% include "partials/topnav2.html" %}
+    <!--================ End Header Menu Area =================-->
+
+    <!-- ================ start banner area ================= -->
+    
+    <!-- ================ end banner area ================= -->
+
+    <!--================Cart Area =================-->
+    <section class="cart_area mt-4 p-0">
+      <div class="container">
+        <div class="cart_inner">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Product</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="media">
+                      <div class="d-flex">
+                        <img src="{% static 'img/cart/cart1.png' %}" alt="" />
+                      </div>
+                      <div class="media-body">
+                        <p>Minimalistic shop for multipurpose use</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <h5>$360.00</h5>
+                  </td>
+                  <td>
+                    <div class="product_count">
+                      <input
+                        type="text"
+                        name="qty"
+                        id="sst"
+                        maxlength="12"
+                        value="1"
+                        title="Quantity:"
+                        class="input-text qty"
+                      />
+                      <button
+                        onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
+                        class="increase items-count"
+                        type="button"
+                      >
+                        <i class="lnr lnr-chevron-up"></i>
+                      </button>
+                      <button
+                        onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
+                        class="reduced items-count"
+                        type="button"
+                      >
+                        <i class="lnr lnr-chevron-down"></i>
+                      </button>
+                    </div>
+                  </td>
+                  <td>
+                    <h5>$720.00</h5>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="media">
+                      <div class="d-flex">
+                        <img src="{% static 'img/cart/cart2.png' %}" alt="" />
+                      </div>
+                      <div class="media-body">
+                        <p>Minimalistic shop for multipurpose use</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <h5>$360.00</h5>
+                  </td>
+                  <td>
+                    <div class="product_count">
+                      <input
+                        type="text"
+                        name="qty"
+                        id="sst"
+                        maxlength="12"
+                        value="1"
+                        title="Quantity:"
+                        class="input-text qty"
+                      />
+                      <button
+                        onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
+                        class="increase items-count"
+                        type="button"
+                      >
+                        <i class="lnr lnr-chevron-up"></i>
+                      </button>
+                      <button
+                        onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
+                        class="reduced items-count"
+                        type="button"
+                      >
+                        <i class="lnr lnr-chevron-down"></i>
+                      </button>
+                    </div>
+                  </td>
+                  <td>
+                    <h5>$720.00</h5>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="media">
+                      <div class="d-flex">
+                        <img src="{% static 'img/cart/cart3.png' %}" alt="" />
+                      </div>
+                      <div class="media-body">
+                        <p>Minimalistic shop for multipurpose use</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <h5>$360.00</h5>
+                  </td>
+                  <td>
+                    <div class="product_count">
+                      <input
+                        type="text"
+                        name="qty"
+                        id="sst"
+                        maxlength="12"
+                        value="1"
+                        title="Quantity:"
+                        class="input-text qty"
+                      />
+                      <button
+                        onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
+                        class="increase items-count"
+                        type="button"
+                      >
+                        <i class="lnr lnr-chevron-up"></i>
+                      </button>
+                      <button
+                        onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
+                        class="reduced items-count"
+                        type="button"
+                      >
+                        <i class="lnr lnr-chevron-down"></i>
+                      </button>
+                    </div>
+                  </td>
+                  <td>
+                    <h5>$720.00</h5>
+                  </td>
+                </tr>
+                <tr class="bottom_button">
+                  <td>
+                    <a class="button" href="#">Update Cart</a>
+                  </td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <h5>Subtotal</h5>
+                  </td>
+                  <td>
+                    <h5>$2160.00</h5>
+                   
+                  </td>
+                  <td> <form action="/checkout/" class="" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="button btn btn-primary ">Proceed to checkout</button>
+                 </form> </td>
+                </tr>
+               
+               
+              </tbody>
+            </table>
+            
+             
+           
+          </div>
+        </div>
+      </div>
+    </section>
+    <!--================End Cart Area =================-->
+
+    <!--================ Start footer Area  =================-->
+    
+    <!--================ End footer Area  =================-->
+
+    <script src="{% static 'vendors2/jquery/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'vendors2/bootstrap/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'vendors2/skrollr.min.js' %}"></script>
+    <script src="{% static 'vendors2/owl-carousel/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'vendors2/nice-select/jquery.nice-select.min.js' %}"></script>
+    <script src="{% static 'vendors2/jquery.ajaxchimp.min.js' %}"></script>
+    <script src="{% static 'vendors2/mail-script.js' %}"></script>
+    <script src="{% static 'js2/main.js' %}"></script>
+  </body>
+</html>

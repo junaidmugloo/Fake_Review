@@ -17,5 +17,11 @@ def product_detail(res):
 def product_shop(res):
     return render(res,"shop.html")
 
+def product_cart(res):
+    return render(res,"cart.html")
+
 def product_contact(res):
     return render(res,"contact.html")
+
+def product_checkout(res):
+    return render(res,"checkout.html")

@@ -46,6 +46,8 @@ urlpatterns = [
      path('product/detail/', front.product_detail, name='product_detail'),
      path('shop/', front.product_shop, name='product_shop'),
      path('contact/', front.product_contact, name='product_contact'),
+     path('cart/', front.product_cart, name='product_cart'),
+     path('checkout/', front.product_checkout, name='product_checkout'),
 
 ]
 
