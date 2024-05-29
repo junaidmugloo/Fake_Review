@@ -22,7 +22,20 @@ def front_index(res):
     return render(res,'index2.html',context=dict);
 
 def front_login(res):
-    return render(res,"login2.html")
+    if res.method == 'POST':
+        form = AuthenticationForm(res, data=res.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(res, user)
+                return redirect('home')
+        else:
+            return render(res,"login2.html",{'error': 'Wrong username or password'})
+    else:
+        form = AuthenticationForm()
+        return render(res,"login2.html",{'form': form})
 
 def front_signup(res):
     return render(res,"signup2.html")
