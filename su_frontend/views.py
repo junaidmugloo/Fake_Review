@@ -6,7 +6,7 @@ from su_admin.models import Category,Products
 from django.contrib.auth.models import User
 from django.contrib.auth import (authenticate,logout)
 from django.contrib.auth import login as cslogin
-
+from textblob import TextBlob
 client = MongoClient('mongodb://localhost:27017/')
 category_db = client['fake_review']
 
@@ -39,3 +39,16 @@ def product_contact(res):
 
 def product_checkout(res):
     return render(res,"checkout.html")
+
+
+#analyzer
+def analyze_sentiment(request):
+    if request.method == 'POST':
+        text = request.POST.get('text')
+        if text:
+            blob = TextBlob(text)
+            sentiment_score = blob.sentiment.polarity
+
+            return render(request, 'analyzer/result.html', {'text': text, 'sentiment_score': sentiment_score})
+
+    return render(request, 'analyzer/setup.html')

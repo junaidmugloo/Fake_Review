@@ -49,6 +49,10 @@ urlpatterns = [
      path('cart/', front.product_cart, name='product_cart'),
      path('checkout/', front.product_checkout, name='product_checkout'),
 
+#analyze
+ path('analyze/', front.analyze_sentiment, name='analyze_sentiment'),
+
+
 ]
 
 if settings.DEBUG:
