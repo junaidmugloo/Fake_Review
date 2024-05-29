@@ -40,7 +40,7 @@ urlpatterns = [
 
 
     #front end routing
-     path('', front.front_index, name='front_index'),
+     path('', front.front_index, name='home'),
      path('login/', front.front_login, name='front_login'),
      path('signup/', front.front_signup, name='front_signup'),
      path('product/detail/', front.product_detail, name='product_detail'),
@@ -52,6 +52,10 @@ urlpatterns = [
 #analyze
  path('analyze/', front.analyze_sentiment, name='analyze_sentiment'),
 
+#test case start
+ path('test/', front.signup_view, name='signup_view'),
+ path('test2/', front.login_view, name='login_view'),
+#test case end
 
 ]
 
