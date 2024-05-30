@@ -3,7 +3,6 @@ import logging
 from django.http import HttpResponse, JsonResponse
 from pymongo import MongoClient
 from su_admin.models import Category,Products
-from .models import CustomUser
 from django.contrib.auth.models import User
 from django.contrib.auth import (authenticate,logout,login)
 from django.contrib.auth.forms import AuthenticationForm
