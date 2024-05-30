@@ -66,14 +66,14 @@
           <div class="col-lg-6">
             <div class="login_form_inner register_form_inner">
               <h3>Create an account</h3>
-              <form class="row login_form" action="#/" id="register_form">
+              <form class="row login_form" method="post" action="/signup/" id="register_form">
                 {% csrf_token %}
                 <div class="col-md-12 form-group">
                   <input
                     type="text"
                     class="form-control"
                     id="name"
-                    name="name"
+                    name="username"
                     placeholder="Username"
                     onfocus="this.placeholder = ''"
                     onblur="this.placeholder = 'Username'"
@@ -103,6 +103,7 @@
                 </div>
                 <div class="col-md-12 form-group">
                   <input
+                  name="password2"
                     type="text"
                     class="form-control"
                     id="confirmPassword"
@@ -123,6 +124,9 @@
                   </button>
                 </div>
               </form>
+              {% if error %}
+             {{error}}
+              {% endif %}
             </div>
           </div>
         </div>

@@ -1,16 +1,18 @@
-from django.shortcuts import (render,HttpResponseRedirect,redirect)
-import json
-from django.http import HttpResponse
+from django.shortcuts import (render,redirect)
+import logging
+from django.http import HttpResponse, JsonResponse
 from pymongo import MongoClient
 from su_admin.models import Category,Products
+from .models import CustomUser
 from django.contrib.auth.models import User
 from django.contrib.auth import (authenticate,logout,login)
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import login as cslogin
+from django.contrib import messages
 from textblob import TextBlob
-from .forms import SignUpForm
+
 client = MongoClient('mongodb://localhost:27017/')
 category_db = client['fake_review']
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 
@@ -28,17 +30,35 @@ def front_login(res):
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
             user = authenticate(username=username, password=password)
-            if user is not None:
+            if user is not None and not user.is_superuser:
                 login(res, user)
                 return redirect('home')
+            else:
+                return render(res,"login2.html",{'error': 'Admin account can''t login '})
         else:
             return render(res,"login2.html",{'error': 'Wrong username or password'})
     else:
         form = AuthenticationForm()
         return render(res,"login2.html",{'form': form})
 
-def front_signup(res):
-    return render(res,"signup2.html")
+def front_signup(request):
+   
+   
+    if request.method == 'POST':
+        email=request.POST.get('email');
+        username=request.POST.get('username');
+        password=request.POST.get('password');
+        user=User.objects.filter(username=username)
+        if user.count()>0:
+            messages.info(request,"Username already taken")
+            return render(request,"signup2.html",{'error': 'Username already taken'})
+        user=User.objects.create(email=email,username=username)
+        user.set_password(password)
+        user.save()
+        return render(request,"signup2.html",{'error': 'Account created successfully'})
+       
+    return render(request, 'signup2.html')
+
 
 def product_detail(res):
     return render(res,"detail2.html")
@@ -72,19 +92,19 @@ def analyze_sentiment(request):
 
 #test case
 
+
 def signup_view(request):
     if request.method == 'POST':
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=password)
-            login(request, user)
-            return redirect('home')
+        email=request.POST.get('email');
+        username=request.POST.get('username');
+        password=request.POST.get('password');
+        user=User.objects.create(email=email,username=username)
+        user.set_password(password)
+        user.save()
     else:
-        form = SignUpForm()
-    return render(request, 'check.html', {'form': form})
+       return render(request, 'signup2.html')
+
+
 
 def login_view(request):
     if request.method == 'POST':

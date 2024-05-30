@@ -1,6 +1,7 @@
 import os
 from djongo import models
 
+
 class Category(models.Model):
     name = models.CharField(max_length=100)
 

@@ -27,7 +27,7 @@ def login(res):
         elif res.POST['password']=="":
             response_data['message'] = 'Enter password'
             return HttpResponse(json.dumps(response_data), content_type="application/json") 
-        elif user is not None:
+        elif user is not None and user.is_superuser:
             cslogin(res,user)
             response_data['message'] = 'Found'
             return HttpResponse(json.dumps(response_data), content_type="application/json") 
