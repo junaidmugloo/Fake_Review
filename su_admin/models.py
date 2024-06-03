@@ -2,6 +2,7 @@ import os
 from djongo import models
 
 
+
 class Category(models.Model):
     name = models.CharField(max_length=100)
 
@@ -21,3 +22,15 @@ def delete(self, *args, **kwargs):
             if os.path.isfile(self.image.path):
                 os.remove(self.image.path)
         super(Products, self).delete(*args, **kwargs)
+
+
+
+class Order_items(models.Model):
+    product = models.ForeignKey(Products, on_delete=models.CASCADE)
+    order_code=models.CharField(max_length=255, default=None)
+    user_id = models.CharField(max_length=255)
+    qty = models.CharField(max_length=255)
+    price= models.CharField(max_length=255)
+    total = models.CharField(max_length=255)
+    status = models.CharField(max_length=255)
+    discount= models.CharField(max_length=255,default=None)

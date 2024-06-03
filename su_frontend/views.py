@@ -1,8 +1,8 @@
-from django.shortcuts import (render,redirect)
+from django.shortcuts import (get_object_or_404, render,redirect)
 import logging
 from django.http import HttpResponse, JsonResponse
 from pymongo import MongoClient
-from su_admin.models import Category,Products
+from su_admin.models import Category,Products,Order_items
 from django.contrib.auth.models import User
 from django.contrib.auth import (authenticate,logout,login)
 from django.contrib.auth.forms import AuthenticationForm
@@ -73,7 +73,42 @@ def product_shop(res):
     return render(res,"shop.html")
 
 def product_cart(res):
-    return render(res,"cart.html")
+    if res.method=='POST':
+        qty_str=res.POST.get('product_qty')
+        price_str=res.POST.get('product_price')
+        try:
+            qty = int(qty_str) if qty_str is not None else 0
+        except ValueError:
+            qty = 0
+
+        try:
+            price = float(price_str) if price_str is not None else 0.0
+        except ValueError:
+            price = 0.0
+        
+        total = price * qty
+        product = get_object_or_404(Products, id=res.POST.get('product_id'))
+        cart=Order_items.objects.create(product=product,
+                                        user_id=res.POST.get('user_id'),
+                                        qty=qty_str,
+                                        price=price_str,
+                                        total=total,
+                                        status="cart",
+                                        discount=""
+
+                                        )
+        cart.save()
+    subtotal=0;
+    cart=Order_items.objects.all();  
+    for i in cart:
+        subtotal= subtotal + float(i.total)
+    
+    cart_data={
+    'cart':cart,
+    'sub':subtotal
+    }
+
+    return render(res,"cart.html",context=cart_data)
 
 def product_contact(res):
     return render(res,"contact.html")
