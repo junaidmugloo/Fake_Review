@@ -52,6 +52,7 @@
       <div class="container">
         <div class="cart_inner">
           <div class="table-responsive">
+            {% if cart.count > 0 %}
             <table class="table">
               <thead>
                 <tr>
@@ -59,10 +60,15 @@
                   <th scope="col">Price</th>
                   <th scope="col">Quantity</th>
                   <th scope="col">Total</th>
+                  <td></th>
                 </tr>
               </thead>
               <tbody>
+                <script>
+                  document.getElementById("cart_count").innerHTML={{cart.count}};
+                </script>
                 {% for item in cart  %}
+                
                 <tr>
                   <td>
                     <div class="media">
@@ -109,11 +115,15 @@
                     <h5>₹{{item.total}}</h5>
                    
                   </td>
+                  <td>
+                    
+                    <i onclick="window.location.href='/cart_delete/{{item.id}}'" class="ti-trash" style="font-size:1.5rem;cursor:pointer;" />
+                  </td>
                 </tr>
                 {% endfor %}
                 <tr>
-                  
-              <td colspan="2">
+                
+              <td colspan="3">
                       <h5>Subtotal</h5>
                   </td>
                   <td>
@@ -127,7 +137,7 @@
                   
                 </td>
               </tr>
-                
+              
              
               
              
@@ -135,7 +145,10 @@
                
               </tbody>
             </table>
-            
+            {% else %}
+            <h1 class="text-center text-warning">Cart Empty<h1>
+            {% endif %}  
+
              
            
           </div>

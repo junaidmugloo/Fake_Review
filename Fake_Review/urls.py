@@ -31,6 +31,7 @@ urlpatterns = [
      path('shop/', front.product_shop, name='product_shop'),
      path('contact/', front.product_contact, name='product_contact'),
      path('cart/', front.product_cart, name='product_cart'),
+     path('cart_delete/<id>', front.delete_cart, name='cart_delete'),
      path('checkout/', front.product_checkout, name='product_checkout'),
 
 #analyze

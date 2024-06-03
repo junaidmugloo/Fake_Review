@@ -110,6 +110,13 @@ def product_cart(res):
 
     return render(res,"cart.html",context=cart_data)
 
+
+def delete_cart(res,id):
+    item=Order_items.objects.filter(id=id);
+    item.delete();
+    return redirect('product_cart');
+
+
 def product_contact(res):
     return render(res,"contact.html")
 
