@@ -18,8 +18,10 @@ logger = logging.getLogger(__name__)
 
 def front_index(res):
     cat=Products.objects.all() 
+    cart=Order_items.objects.filter(user_id=res.user.id).count(); 
     dict = {
-        'dict': cat
+        'dict': cat,
+        'cart':cart
         }
     return render(res,'index2.html',context=dict);
 
@@ -103,7 +105,7 @@ def product_cart(res):
                                         )
         cart.save()
     subtotal=0;
-    cart=Order_items.objects.all();  
+    cart=Order_items.objects.filter(user_id=res.user.id);  
     for i in cart:
         subtotal= subtotal + float(i.total)
     
@@ -126,7 +128,7 @@ def product_contact(res):
 
 def product_checkout(res):
     if res.method=='POST':
-        cart=Order_items.objects.all();
+        cart=Order_items.objects.filter(user_id=res.user.id);
         cart_data={
             'cart':cart,
              'tot':res.POST.get('Subtotal')
