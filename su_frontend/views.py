@@ -179,7 +179,7 @@ def login_view(request):
         form = AuthenticationForm()
     return render(request, 'check2.html', {'form': form})
 
-def logout_view(request):
+def front_logout(request):
     logout(request)
     return redirect('home')
 
