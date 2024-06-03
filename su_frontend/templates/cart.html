@@ -132,9 +132,11 @@
                     
                   </td>
                   <td>
-                    
+                    <form method="post" action="/checkout/">
+                      {% csrf_token %}
+                      <input type="text" name="Subtotal" value="{{sub}}"/>
                     <button class="btn btn-primary">Checkout</button>
-                  
+                    <form/>
                 </td>
               </tr>
               
@@ -169,5 +171,6 @@
     <script src="{% static 'vendors2/jquery.ajaxchimp.min.js' %}"></script>
     <script src="{% static 'vendors2/mail-script.js' %}"></script>
     <script src="{% static 'js2/main.js' %}"></script>
+    
   </body>
 </html>

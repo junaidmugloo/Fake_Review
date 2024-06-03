@@ -34,3 +34,18 @@ class Order_items(models.Model):
     total = models.CharField(max_length=255)
     status = models.CharField(max_length=255)
     discount= models.CharField(max_length=255,default=None)
+
+class Review(models.Model):
+    product = models.ForeignKey(Products, on_delete=models.CASCADE)
+    user_id=models.CharField(max_length=255, default=None)
+    message = models.CharField(max_length=255,default=None)
+    status = models.CharField(max_length=255,default=None)
+
+class Order(models.Model):
+      order=models.ForeignKey(Order_items, on_delete=models.CASCADE)
+      order_code=models.CharField(max_length=255, default=None)
+      user_id=models.CharField(max_length=255, default=None)
+      delivery_address=models.CharField(max_length=255, default=None)
+      order_total=models.CharField(max_length=255, default=None)
+      status = models.CharField(max_length=255,default=None)
+      date = models.DateField()

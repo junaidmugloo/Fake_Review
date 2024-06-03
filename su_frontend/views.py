@@ -66,8 +66,12 @@ def front_signup(request):
     return render(request, 'signup2.html')
 
 
-def product_detail(res):
-    return render(res,"detail2.html")
+def product_detail(res,id):
+    cart=Products.objects.filter(id=id);
+    cart_data={
+    'cart':cart
+    }
+    return render(res,"detail2.html",context=cart_data)
 
 def product_shop(res):
     return render(res,"shop.html")
@@ -121,7 +125,14 @@ def product_contact(res):
     return render(res,"contact.html")
 
 def product_checkout(res):
-    return render(res,"checkout.html")
+    if res.method=='POST':
+        cart=Order_items.objects.all();
+        cart_data={
+            'cart':cart,
+             'tot':res.POST.get('Subtotal')
+        }
+        return render(res,"checkout.html",context=cart_data)
+    return redirect('product_cart');
 
 
 #analyzer

@@ -123,6 +123,8 @@
               <div class="card text-center card-product">
                 <div class="card-product__img">
                   <img
+                    style="cursor:pointer";
+                    onclick="window.location.href='/product/detail/{{item.id}}'"
                     class="card-img"
                     src="{{item.image.url}}"
                     alt=""
@@ -136,10 +138,10 @@
                     <li>
                       <form method="post" action="/cart/">
                         {% csrf_token %}
-                        <input type="number" name="product_id" value="{{item.id}}">
-                        <input type="number" name="product_qty" value="3">
-                        <input type="number" name="product_price" value="{{item.selling_price}}">
-                        <input type="number" name="user_id" value="{{user.id}}">
+                        <input type="hidden" name="product_id" value="{{item.id}}">
+                        <input type="hidden" name="product_qty" value="1">
+                        <input type="hidden" name="product_price" value="{{item.selling_price}}">
+                        <input type="hidden" name="user_id" value="{{user.id}}">
                         <button type="submit"><i class="ti-shopping-cart"></i></button>
     
                       </form>
