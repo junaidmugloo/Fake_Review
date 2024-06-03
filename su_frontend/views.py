@@ -9,6 +9,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from textblob import TextBlob
 
+
 client = MongoClient('mongodb://localhost:27017/')
 category_db = client['fake_review']
 logger = logging.getLogger(__name__)
@@ -44,18 +45,24 @@ def front_signup(request):
    
    
     if request.method == 'POST':
-        email=request.POST.get('email');
-        username=request.POST.get('username');
-        password=request.POST.get('password');
+        email=request.POST.get('email')
+        username=request.POST.get('username')
+        password=request.POST.get('password')
+        first_name = request.POST.get('first_name')
         user=User.objects.filter(username=username)
-        if user.count()>0:
-            messages.info(request,"Username already taken")
-            return render(request,"signup2.html",{'error': 'Username already taken'})
-        user=User.objects.create(email=email,username=username)
-        user.set_password(password)
-        user.save()
-        return render(request,"signup2.html",{'error': 'Account created successfully'})
-       
+        userEmail=User.objects.filter(email=email)
+        if username!="" and email!="" and password!="":
+            if user.count()>0:
+                messages.info(request,"Username already taken")
+                return JsonResponse({"error": "This username is already taken"}, status=400)
+            elif userEmail.count()>0:
+                return JsonResponse({"error": "This email is already taken"}, status=400)
+            user=User.objects.create(email=email,username=username,first_name=first_name)
+            user.set_password(password)
+            user.save()
+            return render(request,"signup2.html",{'success': 'Account created successfully'})
+        else:
+            return JsonResponse({"error": "error occurred"}, status=400)
     return render(request, 'signup2.html')
 
 

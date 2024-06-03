@@ -66,13 +66,31 @@
           <div class="col-lg-6">
             <div class="login_form_inner register_form_inner">
               <h3>Create an account</h3>
-              <form class="row login_form" method="post" action="/signup/" id="register_form">
+              <form class="row login_form" method="post"  id="register_form">
                 {% csrf_token %}
                 <div class="col-md-12 form-group">
                   <input
                     type="text"
                     class="form-control"
                     id="name"
+                    required 
+                    minlength="8"
+                    maxlength="20"
+                    name="first_name"
+                    placeholder="Name"
+                    onfocus="this.placeholder = ''"
+                    onblur="this.placeholder = 'Name'"
+                  />
+                </div>
+
+                <div class="col-md-12 form-group">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="name"
+                    required 
+                    minlength="8"
+                    maxlength="20"
                     name="username"
                     placeholder="Username"
                     onfocus="this.placeholder = ''"
@@ -81,7 +99,8 @@
                 </div>
                 <div class="col-md-12 form-group">
                   <input
-                    type="text"
+                  required
+                    type="email"
                     class="form-control"
                     id="email"
                     name="email"
@@ -92,6 +111,9 @@
                 </div>
                 <div class="col-md-12 form-group">
                   <input
+                    required
+                    minlength="8"
+                    maxlength="20"
                     type="text"
                     class="form-control"
                     id="password"
@@ -135,5 +157,44 @@
     <script src="{% static 'vendors2/jquery.ajaxchimp.min.js' %}"></script>
     <script src="{% static 'vendors2/mail-script.js' %}"></script>
     <script src="{% static 'js2/main.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
+    <script>
+      $(document).ready(function () {                 
+          $('#register_form').submit(function (event) { 
+              event.preventDefault();                 
+              var form = document.getElementById('register_form'); 
+              var formData = new FormData(form); 
+             
+              $.ajax({ 
+                  url: '/signup/', 
+                  method: 'POST', 
+                  data: formData, 
+                  processData: false, 
+                  contentType: false, 
+                  success: function (response) {                       
+                      Swal.fire({
+                          title: "Done",
+                          text: "Account Created successfully.!",
+                          icon: "success"
+                        });
+                        console.log(response)
+                        window.location.href='/login/'
+                  }, 
+                  error: function (xhr, status, data) {                        
+                      Swal.fire({
+                          icon: "error",
+                          title: "Oops...",
+                          text: xhr.responseJSON.error,
+                         
+                        });
+                      console.log(xhr); 
+                  } 
+              }); 
+          }); 
+      }); 
+  </script>
   </body>
 </html>
