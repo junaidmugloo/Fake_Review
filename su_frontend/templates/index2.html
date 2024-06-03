@@ -1,5 +1,5 @@
 {% load static %}
-{% if  user.is_authenticated %}
+{% comment %} {% if  user.is_authenticated %} {% endcomment %}
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -615,8 +615,8 @@
     <script src="{% static 'js2/main.js' %}"></script>
   </body>
 </html>
-{% else %}
+{% comment %} {% else %}
 <script>
   window.location.href="/login/";
 </script>
-{% endif %}
+{% endif %} {% endcomment %}

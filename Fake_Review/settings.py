@@ -55,7 +55,7 @@ MIDDLEWARE = [
 ]
 RESTRICTED_URLS = [
     '/cart/',  # Adjust to the paths you want to restrict
-    '/contact/'
+    '/shop/',
     # Add more URLs as needed
 ]
 
