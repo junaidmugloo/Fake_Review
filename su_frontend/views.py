@@ -90,7 +90,7 @@ def product_shop(res):
     return render(res,"shop.html")
 
 def product_cart(res):
-    if res.method=='POST':
+    if res.method=='POST' and Order_items.objects.filter(product_id=res.POST.get('product_id'),user_id=res.POST.get('user_id')).count()==0: 
         qty_str=res.POST.get('product_qty')
         price_str=res.POST.get('product_price')
         try:
