@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,6 +29,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+
+load_dotenv()
+
+PHONEPE_MERCHANT_ID = os.getenv('PHONEPE_MERCHANT_ID')
+PHONEPE_SALT_KEY = os.getenv('PHONEPE_SALT_KEY')
+PHONEPE_INITIATE_URL = os.getenv('PHONEPE_INITIATE_URL')
 
 # Application definition
 

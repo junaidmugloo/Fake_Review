@@ -49,3 +49,5 @@ class Order(models.Model):
       order_total=models.CharField(max_length=255, default=None)
       status = models.CharField(max_length=255,default=None)
       date = models.DateField()
+
+

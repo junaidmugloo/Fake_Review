@@ -1,14 +1,25 @@
-from django.shortcuts import (get_object_or_404, render,redirect)
-import logging
-from django.http import HttpResponse, JsonResponse
-from pymongo import MongoClient
-from su_admin.models import Category,Products,Order_items
+from django.shortcuts import get_object_or_404, render, redirect
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
-from django.contrib.auth import (authenticate,logout,login)
+from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
+from django.urls import reverse
+from django.conf import settings
+import logging
+import json
+import hmac
+import hashlib
+import shortuuid
+from cryptography.hazmat.primitives import hashes
+from pymongo import MongoClient
+from su_admin.models import Category, Products, Order_items
 from textblob import TextBlob
-
+from cryptography.hazmat.backends import default_backend
+import uuid
+import base64
+import requests
 
 client = MongoClient('mongodb://localhost:27017/')
 category_db = client['fake_review']
@@ -116,6 +127,18 @@ def product_cart(res):
 
     return render(res,"cart.html",context=cart_data)
 
+@csrf_exempt
+def update_cart(res,id):
+    if res.method=="POST":
+         data = json.loads(res.body)
+         qty = data.get('qty')
+         print("hello sir",qty)
+         cart=Order_items.objects.get(id=id)
+         cart.qty=qty
+         cart.total=float(cart.price)*float(qty)
+         cart.save()
+         return JsonResponse({'message': 'Data updated successfully'}, status=200)
+
 
 def delete_cart(res,id):
     item=Order_items.objects.filter(id=id);
@@ -185,4 +208,157 @@ def front_logout(request):
     logout(request)
     return redirect('home')
 
+
 #test case end
+
+
+
+
+
+
+
+
+
+
+
+
+#payment gateway
+
+# views.py
+
+
+
+# Initialize logger
+
+def generate_checksum(data, salt_key, salt_index):
+    string_to_hash = f"{data}/pg/v1/pay{salt_key}"
+    sha256 = hashlib.sha256(string_to_hash.encode('utf-8')).hexdigest()
+    return f"{sha256}###{salt_index}"
+
+@csrf_exempt
+def payy(request):
+    if request.method == "POST":
+        try:
+            
+            # Generate unique IDs
+            merchant_transaction_id = str(uuid.uuid4())
+            merchant_order_id = str(uuid.uuid4())
+            amount_in_paise = 1000
+
+            # Build redirect and callback URLs
+            redirect_url = request.build_absolute_uri(reverse('callback'))
+            callback_url = request.build_absolute_uri(reverse('callback'))
+
+            # Prepare data payload
+            data = {
+                'merchantId': 'PGTESTPAYUAT',
+                'merchantTransactionId': merchant_transaction_id,
+                'merchantUserId': 'MUID123',
+                'merchantOrderId': merchant_order_id,
+                'amount': amount_in_paise,
+                'redirectUrl': redirect_url,
+                'redirectMode': 'POST',
+                'callbackUrl': callback_url,
+                'mobileNumber': '1234567890',
+                'paymentInstrument': {
+                    'type': 'PAY_PAGE',
+                },
+            }
+
+            # Encode data payload
+            encoded_data = base64.b64encode(json.dumps(data).encode('utf-8')).decode('utf-8')
+
+            # Generate checksum
+            salt_key = '099eb0cd-02cf-4e2a-8aca-3e6c6aff0399'
+            salt_index = 1
+            final_x_header = generate_checksum(encoded_data, salt_key, salt_index)
+
+            # Make payment request
+            headers = {
+                'Content-Type': 'application/json',
+                'X-VERIFY': final_x_header
+            }
+            response = requests.post(
+                'https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay',
+                json={'request': encoded_data},
+                headers=headers
+            )
+
+            # Handle payment response
+            response_data = response.json()
+            if response.status_code == 200 and response_data.get('success', False):
+                redirect_urll = response_data['data']['instrumentResponse']['redirectInfo']['url']
+                return HttpResponseRedirect(redirect_urll)
+            else:
+                return JsonResponse({'error': 'Payment initiation failed', 'data': response_data}, status=response.status_code)
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+# Callback view
+@csrf_exempt
+def callback(request):
+    if request.method == "POST":
+        try:
+            input_data = request.POST
+
+            merchant_id = input_data.get('merchantId')
+            transaction_id = input_data.get('transactionId')
+            order_data = input_data.get('order_data')
+
+            if not all([merchant_id, transaction_id, order_data]):
+                return JsonResponse({'error': 'Missing parameters'}, status=400)
+
+            salt_key = '099eb0cd-02cf-4e2a-8aca-3e6c6aff0399'
+            salt_index = 1
+
+            string_to_hash = f"/pg/v1/status/{merchant_id}/{transaction_id}{salt_key}"
+            sha256 = hashlib.sha256(string_to_hash.encode('utf-8')).hexdigest()
+            final_x_header = f"{sha256}###{salt_index}"
+
+            headers = {
+                'Content-Type': 'application/json',
+                'accept': 'application/json',
+                'X-VERIFY': final_x_header,
+                'X-MERCHANT-ID': transaction_id,
+                'merchantOrderId': order_data,
+            }
+
+            url = f"https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay/{merchant_id}/{transaction_id}/"
+            response = requests.get(url, headers=headers)
+
+            response_data = response.json()
+
+            if response.status_code == 200:
+                # Perform actions based on the response data
+                if response_data.get('code') == 'PAYMENT_SUCCESS':
+                    # Payment is successful
+                    # Perform necessary actions
+                    pass
+                else:
+                    # Payment is not successful
+                    # Perform necessary actions
+                    pass
+
+                return JsonResponse({'success': True, 'data': response_data})
+            else:
+                return JsonResponse({'error': 'Failed to fetch status', 'data': response_data}, status=response.status_code)
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+# Render payment page
+def payment(request):
+    return render(request, 'payment.html')
+
+# Dummy view for handling payment response
+def response_back(request):
+    return JsonResponse({'message': 'Payment response received'})
+
+# Dummy view for handling payment callback
+def pay_callback(request):
+    return JsonResponse({'message': 'Payment callback received'})

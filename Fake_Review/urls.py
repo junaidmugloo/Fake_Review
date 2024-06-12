@@ -33,6 +33,7 @@ urlpatterns = [
      path('contact/', front.product_contact, name='product_contact'),
      path('cart/', front.product_cart, name='product_cart'),
      path('cart_delete/<id>', front.delete_cart, name='cart_delete'),
+     path('cart_update/<id>',front.update_cart, name='cart_update'),
      path('checkout/', front.product_checkout, name='product_checkout'),
 
 #analyze
@@ -43,6 +44,12 @@ urlpatterns = [
  path('test2/', front.login_view, name='login_view'),
 #test case end
 
+#payment gateway
+    path('payy/', front.payy, name='payy'),
+    path('callback/', front.callback, name='callback'),
+    path('payment/', front.payment, name='payment'),
+    path('response_back/', front.response_back, name='pay_response_back'),
+    path('pay_callback/', front.pay_callback, name='pay_callback'),
 ]
 
 if settings.DEBUG:
