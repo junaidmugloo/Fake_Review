@@ -131,6 +131,9 @@ def product_cart(res):
 
 def product_review(res):
     if res.method=="POST":
+        text = res.POST.get('subject')
+        blob = TextBlob(text)
+        sentiment_score = blob.sentiment.polarity
         flag= Review.objects.filter(user_id=res.POST.get('user_id')).count()
         if flag > 0:
             return JsonResponse({'success': 'Your have already done your Review'})
@@ -140,7 +143,7 @@ def product_review(res):
                                         user_id=res.POST.get('user_id'),
                                         rating=res.POST.get('rating'),
                                         message=res.POST.get('subject'),
-                                        status="1",
+                                        status=sentiment_score,
                                         )
             review.save()
             return JsonResponse({'success': 'Thank for your Review'})
