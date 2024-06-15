@@ -605,10 +605,10 @@
               </div>
               
               <div class="col-lg-6">
-                <form action="/product/review/" method="post" class="form-contact form-review mt-3">
+                <form  id="rev" method="post" class="form-contact form-review mt-3">
                 <div class="review_box">
                   <h4>Add a Review</h4>
-                  <p>Your Rating: {{flag}}</p>
+                  <p>Your Rating:</p>
                   <div class="container">
                     <div class="feedback">
                       <div class="rating">
@@ -787,5 +787,43 @@
     <script src="{% static 'vendors2/jquery.ajaxchimp.min.js' %}"></script>
     <script src="{% static 'vendors2/mail-script.js' %}"></script>
     <script src="{% static 'js2/main.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+     
+      $(document).ready(function () {                 
+        $('#rev').submit(function (event) { 
+            event.preventDefault();                 
+            var form = document.getElementById('rev'); 
+            var formData = new FormData(form); 
+           
+            $.ajax({ 
+                url: '/product/review/', 
+                method: 'POST', 
+                data: formData, 
+                processData: false, 
+                contentType: false, 
+                success: function (response) {                       
+                    Swal.fire({
+                        title: "Done",
+                        text: response.success,
+                        icon: "success"
+                      });
+                      console.log(response); 
+                      {% comment %} window.location.reload(); {% endcomment %}
+                }, 
+                error: function (xhr, status, error) {                        
+                    Swal.fire({
+                        icon: "Error",
+                        title: "Oops...",
+                        text: "Something went wrong!",
+                       
+                      });
+                    console.error(error); 
+                } 
+            }); 
+        }); 
+    }); 
+    </script>
   </body>
 </html>
