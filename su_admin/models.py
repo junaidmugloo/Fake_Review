@@ -40,6 +40,7 @@ class Review(models.Model):
     user_id=models.CharField(max_length=255, default=None)
     message = models.CharField(max_length=255,default=None)
     status = models.CharField(max_length=255,default=None)
+    rating = models.CharField(max_length=255,default=None)
 
 class Order(models.Model):
       order=models.ForeignKey(Order_items, on_delete=models.CASCADE)

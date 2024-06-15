@@ -152,7 +152,7 @@
     <!--================Single Product Area =================-->
   
     
-   
+   {% if cart %}
     <div class="product_image_area mt-1 pt-0">
       {% for item in cart  %}
       <div class="container">
@@ -234,7 +234,7 @@
           </div>
         </div>
       </div>
-      {% endfor %}
+     
     </div>
    
     <!--================End Single Product Area =================-->
@@ -255,7 +255,7 @@
               >Description</a
             >
           </li>
-          <li class="nav-item">
+          {% comment %} <li class="nav-item">
             <a
               class="nav-link"
               id="profile-tab"
@@ -266,7 +266,7 @@
               aria-selected="false"
               >Specification</a
             >
-          </li>
+          </li> {% endcomment %}
          
           <li class="nav-item">
             <a
@@ -425,48 +425,7 @@
                       ullamco laboris nisi ut aliquip ex ea commodo
                     </p>
                   </div>
-                  <div class="review_item reply">
-                    <div class="media">
-                      <div class="d-flex">
-                        <img
-                          src="{% static 'img/product/review-2.png' %}"
-                          alt=""
-                        />
-                      </div>
-                      <div class="media-body">
-                        <h4>Blake Ruiz</h4>
-                        <h5>12th Feb, 2018 at 05:56 pm</h5>
-                        <a class="reply_btn" href="#">Reply</a>
-                      </div>
-                    </div>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                      sed do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                      ullamco laboris nisi ut aliquip ex ea commodo
-                    </p>
-                  </div>
-                  <div class="review_item">
-                    <div class="media">
-                      <div class="d-flex">
-                        <img
-                          src="{% static 'img/product/review-3.png' %}"
-                          alt=""
-                        />
-                      </div>
-                      <div class="media-body">
-                        <h4>Blake Ruiz</h4>
-                        <h5>12th Feb, 2018 at 05:56 pm</h5>
-                        <a class="reply_btn" href="#">Reply</a>
-                      </div>
-                    </div>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                      sed do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                      ullamco laboris nisi ut aliquip ex ea commodo
-                    </p>
-                  </div>
+                  
                 </div>
               </div>
               <div class="col-lg-6">
@@ -603,6 +562,7 @@
                   </div>
                 </div>
                 <div class="review_list">
+                  {% for r in review %}
                   <div class="review_item">
                     <div class="media">
                       <div class="d-flex">
@@ -612,76 +572,43 @@
                         />
                       </div>
                       <div class="media-body">
-                        <h4>Blake Ruiz</h4>
+                        <h4>{{r.user_id}}</h4>
+                        {% if r.rating == 1 %}
+                        <i class="fa fa-star"></i>
+                        {% elif r.rating == 2 %}
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        {% elif r.rating == 3 %}
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        {% elif r.rating == 4 %}
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        {% else %}
                         <i class="fa fa-star"></i>
                         <i class="fa fa-star"></i>
                         <i class="fa fa-star"></i>
                         <i class="fa fa-star"></i>
                         <i class="fa fa-star"></i>
+                        {% endif %}
                       </div>
                     </div>
                     <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                      sed do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                      ullamco laboris nisi ut aliquip ex ea commodo
+                     {{r.message}}
                     </p>
                   </div>
-                  <div class="review_item">
-                    <div class="media">
-                      <div class="d-flex">
-                        <img
-                          src="{% static 'img/product/review-2.png' %}"
-                          alt=""
-                        />
-                      </div>
-                      <div class="media-body">
-                        <h4>Blake Ruiz</h4>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                      </div>
-                    </div>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                      sed do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                      ullamco laboris nisi ut aliquip ex ea commodo
-                    </p>
-                  </div>
-                  <div class="review_item">
-                    <div class="media">
-                      <div class="d-flex">
-                        <img
-                          src="{% static 'img/product/review-3.png' %}"
-                          alt=""
-                        />
-                      </div>
-                      <div class="media-body">
-                        <h4>Blake Ruiz</h4>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                      </div>
-                    </div>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                      sed do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                      ullamco laboris nisi ut aliquip ex ea commodo
-                    </p>
-                  </div>
+                  {% endfor %}
                 </div>
               </div>
+              
               <div class="col-lg-6">
-                <form action="#/" method="post" class="form-contact form-review mt-3">
+                <form action="/product/review/" method="post" class="form-contact form-review mt-3">
                 <div class="review_box">
                   <h4>Add a Review</h4>
-                  <p>Your Rating:</p>
+                  <p>Your Rating: {{flag}}</p>
                   <div class="container">
                     <div class="feedback">
                       <div class="rating">
@@ -789,6 +716,9 @@
                  
                     {% csrf_token %}
                     <div class="form-group">
+                      <input type="text" name="user_id" value="{{user.id}}"/>
+                      <input type="text" name="product_id" value="{{item.id}}"/>
+
                       <input
                         readonly
                         value="{{user.first_name}}"
@@ -835,6 +765,7 @@
         </div>
       </div>
     </section>
+    {% endfor %}
     <!--================End Product Description Area =================-->
 
     <!--================ Start related Product area =================-->
@@ -845,6 +776,9 @@
   
     <!--================ End footer Area  =================-->
 
+    {% else %}
+    <h1 class="text-center text-warning mt-5">No product found</h1>
+    {% endif %}
     <script src="{% static 'vendors2/jquery/jquery-3.2.1.min.js' %}"></script>
     <script src="{% static 'vendors2/bootstrap/bootstrap.bundle.min.js' %}"></script>
     {% comment %} <script src="{% static 'vendors2/skrollr.min.js' %}"></script> {% endcomment %}

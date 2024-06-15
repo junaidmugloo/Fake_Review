@@ -28,12 +28,14 @@ urlpatterns = [
      path('login/', front.front_login, name='front_login'),
      path('logout/', front.front_logout, name='front_logout'),
      path('signup/', front.front_signup, name='front_signup'),
-     path('product/detail/<id>', front.product_detail, name='product_detail'),
+     path('product/detail/<int:id>', front.product_detail, name='product_detail'),
+     path('product/review/', front.product_review, name='product_review'),
+     
      path('shop/', front.product_shop, name='product_shop'),
      path('contact/', front.product_contact, name='product_contact'),
      path('cart/', front.product_cart, name='product_cart'),
-     path('cart_delete/<id>', front.delete_cart, name='cart_delete'),
-     path('cart_update/<id>',front.update_cart, name='cart_update'),
+     path('cart_delete/<int:id>', front.delete_cart, name='cart_delete'),
+     path('cart_update/<int:id>',front.update_cart, name='cart_update'),
      path('checkout/', front.product_checkout, name='product_checkout'),
 
 #analyze

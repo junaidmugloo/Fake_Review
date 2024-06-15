@@ -14,7 +14,7 @@ import hashlib
 import shortuuid
 from cryptography.hazmat.primitives import hashes
 from pymongo import MongoClient
-from su_admin.models import Category, Products, Order_items
+from su_admin.models import Category, Products, Order_items,Review
 from textblob import TextBlob
 from cryptography.hazmat.backends import default_backend
 import uuid
@@ -81,8 +81,10 @@ def front_signup(request):
 
 def product_detail(res,id):
     cart=Products.objects.filter(id=id);
+    review=Review.objects.filter(product_id=id)
     cart_data={
-    'cart':cart
+    'cart':cart,
+    'review':review
     }
     return render(res,"detail2.html",context=cart_data)
 
@@ -127,6 +129,23 @@ def product_cart(res):
 
     return render(res,"cart.html",context=cart_data)
 
+def product_review(res):
+    if res.method=="POST":
+        flag= Review.objects.filter(user_id=res.POST.get('user_id')).count()
+        if flag > 0:
+            return JsonResponse({'success': 'Your have already done your Review'})
+        else:
+            product = get_object_or_404(Products, id=res.POST.get('product_id'))
+            review=Review.objects.create(product=product,
+                                        user_id=res.POST.get('user_id'),
+                                        rating=res.POST.get('rating'),
+                                        message=res.POST.get('subject'),
+                                        status="1",
+                                        )
+            review.save()
+            return JsonResponse({'success': 'Thank for your Review'})
+
+
 @csrf_exempt
 def update_cart(res,id):
     if res.method=="POST":
@@ -164,11 +183,23 @@ def product_checkout(res):
 def analyze_sentiment(request):
     if request.method == 'POST':
         text = request.POST.get('text')
-        if text:
-            blob = TextBlob(text)
-            sentiment_score = blob.sentiment.polarity
-
-            return render(request, 'analyzer/result.html', {'text': text, 'sentiment_score': sentiment_score})
+        blob = TextBlob(text)
+        sentiment_score = blob.sentiment.polarity
+       
+        rating=0
+   
+        if sentiment_score >= 0.5:
+         rating= 5
+        elif sentiment_score >= 0.2:
+         rating= 4
+        elif sentiment_score >= -0.2:
+         rating= 3
+        elif sentiment_score >= -0.5:
+         rating= 2
+        else:
+         rating= 1
+       
+        return render(request, 'analyzer/result.html', {'text': text,'rating':blob.sentiment, 'sentiment_score': sentiment_score})
 
     return render(request, 'analyzer/setup.html')
 
