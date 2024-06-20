@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Aroma Shop - Checkout</title>
+    <title>Checkout</title>
     <link rel="icon" href="{% static 'img/Fevicon.png' %}" type="image/png" />
 
     <link
@@ -50,22 +50,24 @@
 
     <!--================Checkout Area =================-->
     <section class="checkout_area mt-4 p-0">
+     
       <div class="container">
         
        
         <div class="billing_details">
-          <div class="row">
+         
+         
+            <form
+            class="row contact_form"
+            action="/place_order/"
+            method="post">
             <div class="col-lg-8">
               <h3>Shipping Details</h3>
-              <form
-                class="row contact_form"
-                action="#"
-                method="post"
-                novalidate="novalidate"
-              >
+             
                 {% csrf_token %}
-                <div class="col-md-6 form-group p_star">
+                <div class="col-md-12 form-group p_star">
                   <input
+                  required
                     type="text"
                     class="form-control"
                     id="first"
@@ -77,13 +79,22 @@
                     data-placeholder="Shipping Address"
                   ></span>
                 </div>
-                <div class="col-md-6 form-group p_star">
+                <div class="col-md-12 form-group p_star">
                   <input
+                  required
                     type="text"
                     class="form-control"
                     id="last"
                     name="contact"
                     placeholder="Contact Number"
+                  />
+                  <input
+                  required
+                    type="hidden"
+                    class="form-control"
+                     value={{user.id}}
+                    name="user_id"
+                   
                   />
                   <span class="placeholder" data-placeholder="Contact Number"></span>
                 </div>
@@ -96,7 +107,7 @@
                   </select>
                 </div>
                 <div class="col-md-12 form-group p_star">
-                  <select  id ="state" class="country_select">
+                  <select required id ="state" name="state" class="country_select">
                     
                   </select>
                 </div>
@@ -105,7 +116,7 @@
               
              
                 <div class="col-md-12 form-group">
-                  <input
+                  <input required
                     type="text"
                     class="form-control"
                     id="zip"
@@ -117,18 +128,18 @@
                 <div class="col-md-12 form-group mb-0">
                   <div class="creat_account">
                   
-                    <input type="checkbox" id="f-option3" name="selector" />
+                    <input type="checkbox" required id="f-option3" name="shipp" />
                     <label for="f-option3">Ship to this address.</label>
                   </div>
                   <textarea
                     class="form-control"
-                    name="message"
+                    name="address"
                     id="message"
                     rows="1"
                     placeholder="Order Notes"
                   ></textarea>
                 </div>
-              </form>
+              
             </div>
             <div class="col-lg-4">
               <div class="order_box">
@@ -156,9 +167,11 @@
                     <a href="#">Total <span>₹{{tot}}</span></a>
                   </li>
                 </ul>
+
+                <input type="hidden" name="total" value={{tot}} >
                 <div class="payment_item">
                   <div class="radion_btn">
-                    <input type="radio" id="f-option5" name="selector" />
+                    <input type="radio" value="COD" required id="f-option5" name="selector" />
                     <label for="f-option5">Cash on Delivery</label>
                     <div class="check"></div>
                   </div>
@@ -168,7 +181,7 @@
                 </div>
                 <div class="payment_item active">
                   <div class="radion_btn">
-                    <input type="radio" id="f-option6" name="selector" />
+                    <input type="radio" value="online" required id="f-option6" name="selector" />
                     <label for="f-option6">Online Payment </label>
                     <img src="{% static 'img/product/card.jpg' %}" alt="" />
                     <div class="check"></div>
@@ -179,18 +192,21 @@
                   </p>
                 </div>
                 <div class="creat_account">
-                  <input type="checkbox" id="f-option4" name="selector" />
+                  <input type="checkbox" required id="f-option4" name="terms" />
                   <label for="f-option4">I’ve read and accept the </label>
                   <a href="#">terms &amp; conditions*</a>
                 </div>
                 <div class="text-center">
-                  <a class="button button-paypal" href="#">Place Order</a>
+                  <button type="submit" class="button button-paypal" href="#">Place Order</button>
                 </div>
               </div>
-            </div>
+           
+          </form>
           </div>
+        
         </div>
       </div>
+    
     </section>
     <!--================End Checkout Area =================-->
 

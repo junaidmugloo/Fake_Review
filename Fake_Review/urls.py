@@ -37,6 +37,11 @@ urlpatterns = [
      path('cart_delete/<int:id>', front.delete_cart, name='cart_delete'),
      path('cart_update/<int:id>',front.update_cart, name='cart_update'),
      path('checkout/', front.product_checkout, name='product_checkout'),
+     path('place_order/', front.place_order, name='place_order'),
+     path('myorders/<id>', front.myorders, name='myorders'),
+     path('orders/', front.orders, name='orders'),
+    
+
 
 #analyze
  path('analyze/', front.analyze_sentiment, name='analyze_sentiment'),

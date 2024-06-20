@@ -26,6 +26,7 @@ def delete(self, *args, **kwargs):
 
 
 class Order_items(models.Model):
+    order_code = models.CharField(max_length=20, editable=False,default=None)
     product = models.ForeignKey(Products, on_delete=models.CASCADE)
     order_code=models.CharField(max_length=255, default=None)
     user_id = models.CharField(max_length=255)
@@ -43,12 +44,18 @@ class Review(models.Model):
     rating = models.CharField(max_length=255,default=None)
 
 class Order(models.Model):
-      order=models.ForeignKey(Order_items, on_delete=models.CASCADE)
-      order_code=models.CharField(max_length=255, default=None)
+      order_code = models.CharField(max_length=20,default=None)
+      created_at = models.DateTimeField(auto_now_add=True)
       user_id=models.CharField(max_length=255, default=None)
       delivery_address=models.CharField(max_length=255, default=None)
       order_total=models.CharField(max_length=255, default=None)
       status = models.CharField(max_length=255,default=None)
-      date = models.DateField()
+      contact_number = models.CharField(max_length=255,default=None)
+      delivery_mode = models.CharField(max_length=255,default=None)
+      pincode = models.CharField(max_length=255,default=None)
+      state = models.CharField(max_length=255,default=None)
+      country = models.CharField(max_length=255,default=None)
+
+      
 
 

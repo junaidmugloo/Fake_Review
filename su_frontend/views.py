@@ -6,6 +6,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
+from django.db import transaction, IntegrityError
 from django.conf import settings
 import logging
 import json
@@ -14,7 +15,7 @@ import hashlib
 import shortuuid
 from cryptography.hazmat.primitives import hashes
 from pymongo import MongoClient
-from su_admin.models import Category, Products, Order_items,Review
+from su_admin.models import Category, Products, Order_items,Review,Order
 from textblob import TextBlob
 from cryptography.hazmat.backends import default_backend
 import uuid
@@ -25,11 +26,19 @@ client = MongoClient('mongodb://localhost:27017/')
 category_db = client['fake_review']
 logger = logging.getLogger(__name__)
 
+#generate order code
+def generate_order_code():
+    while True:
+        code = str(uuid.uuid4()).replace("-", "").upper()[:20]
+        if not Order.objects.filter(order_code=code).exists():
+            return code
+
+
 # Create your views here.
 
 def front_index(res):
     cat=Products.objects.all() 
-    cart=Order_items.objects.filter(user_id=res.user.id).count(); 
+    cart=Order_items.objects.filter(user_id=res.user.id,status="cart").count(); 
     dict = {
         'dict': cat,
         'cart':cart
@@ -92,7 +101,7 @@ def product_shop(res):
     return render(res,"shop.html")
 
 def product_cart(res):
-    if res.method=='POST' and Order_items.objects.filter(product_id=res.POST.get('product_id'),user_id=res.POST.get('user_id')).count()==0: 
+    if res.method=='POST' and Order_items.objects.filter(status="cart",product_id=res.POST.get('product_id'),user_id=res.POST.get('user_id')).count()==0: 
         qty_str=res.POST.get('product_qty')
         price_str=res.POST.get('product_price')
         try:
@@ -118,7 +127,7 @@ def product_cart(res):
                                         )
         cart.save()
     subtotal=0;
-    cart=Order_items.objects.filter(user_id=res.user.id);  
+    cart=Order_items.objects.filter(user_id=res.user.id,status="cart");  
     for i in cart:
         subtotal= subtotal + float(i.total)
     
@@ -128,6 +137,54 @@ def product_cart(res):
     }
 
     return render(res,"cart.html",context=cart_data)
+
+
+
+def myorders(res,id):
+    if res.method=='POST' and Order_items.objects.filter(status="cart",product_id=res.POST.get('product_id'),user_id=res.POST.get('user_id')).count()==0: 
+        qty_str=res.POST.get('product_qty')
+        price_str=res.POST.get('product_price')
+        try:
+            qty = int(qty_str) if qty_str is not None else 0
+        except ValueError:
+            qty = 0
+
+        try:
+            price = float(price_str) if price_str is not None else 0.0
+        except ValueError:
+            price = 0.0
+        
+        total = price * qty
+        product = get_object_or_404(Products, id=res.POST.get('product_id'))
+        cart=Order_items.objects.create(product=product,
+                                        user_id=res.POST.get('user_id'),
+                                        qty=qty_str,
+                                        price=price_str,
+                                        total=total,
+                                        status="cart",
+                                        discount=""
+
+                                        )
+        cart.save()
+    subtotal=0;
+    cart=Order_items.objects.filter(order_code=id,status="order");  
+    for i in cart:
+        subtotal= subtotal + float(i.total)
+    
+    cart_data={
+    'cart':cart,
+    'sub':subtotal
+    }
+
+    return render(res,"myorders.html",context=cart_data)
+
+def orders(res):
+    order=Order.objects.filter(user_id=res.user.id);      
+    order_data={
+    'order':order,
+    }
+
+    return render(res,"orders.html",context=order_data)
 
 def product_review(res):
     if res.method=="POST":
@@ -181,6 +238,31 @@ def product_checkout(res):
         return render(res,"checkout.html",context=cart_data)
     return redirect('product_cart');
 
+def place_order(res):
+     if res.method=="POST":
+       
+        code=generate_order_code()
+        order_item=Order_items.objects.filter(user_id=res.user.id,status='cart')
+        for item in order_item:
+            item.order_code=code
+            item.status='order'
+            item.save()
+            
+        order = Order.objects.create(
+        order_code=code,
+        user_id=res.user.id,
+        delivery_address=res.POST.get('address'),
+        status="order_confirmed",
+        contact_number=res.POST.get('contact'),
+        delivery_mode=res.POST.get('selector'),
+        state=res.POST.get('stt'),
+        pincode=res.POST.get('zip'),
+        country=res.POST.get('state'),
+        order_total=res.POST.get('total'),
+        )
+        order.save()
+        return render(res,'thanks.html')
+     return render(res,'thanks.html')
 
 #analyzer
 def analyze_sentiment(request):
