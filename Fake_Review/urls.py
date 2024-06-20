@@ -13,11 +13,20 @@ urlpatterns = [
     #admin login from admin panel or django admin
     path('su/login',su.login),
     path('su/logout',su.logout_view),
+
+    #user routing
+     path('su/view/users',su.view_users),
    
     #product routing
     path('su/add/products',su.add_product),
     path('su/view/products',su.view_product),
     path('su/products/delete/<id>',su.delete_product),
+    path('su/view/review',su.view_review),
+    #orders routing
+     path('su/view/orders',su.view_orders),
+     path('su/view/orders/change',su.change_order),
+     
+     path('su/view/order_details/<id>',su.order_details),
     # category routing
     path('su/category',su.category),
     path('su/category/delete/<id>',su.category_delete),

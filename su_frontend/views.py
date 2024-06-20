@@ -141,31 +141,6 @@ def product_cart(res):
 
 
 def myorders(res,id):
-    if res.method=='POST' and Order_items.objects.filter(status="cart",product_id=res.POST.get('product_id'),user_id=res.POST.get('user_id')).count()==0: 
-        qty_str=res.POST.get('product_qty')
-        price_str=res.POST.get('product_price')
-        try:
-            qty = int(qty_str) if qty_str is not None else 0
-        except ValueError:
-            qty = 0
-
-        try:
-            price = float(price_str) if price_str is not None else 0.0
-        except ValueError:
-            price = 0.0
-        
-        total = price * qty
-        product = get_object_or_404(Products, id=res.POST.get('product_id'))
-        cart=Order_items.objects.create(product=product,
-                                        user_id=res.POST.get('user_id'),
-                                        qty=qty_str,
-                                        price=price_str,
-                                        total=total,
-                                        status="cart",
-                                        discount=""
-
-                                        )
-        cart.save()
     subtotal=0;
     cart=Order_items.objects.filter(order_code=id,status="order");  
     for i in cart:

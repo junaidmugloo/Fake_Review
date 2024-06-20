@@ -2,7 +2,7 @@ from django.shortcuts import (render,HttpResponseRedirect)
 import json
 from django.http import HttpResponse
 from pymongo import MongoClient
-from .models import Category,Products
+from .models import Category,Products,Order,Order_items,Review
 from django.contrib.auth.models import User
 from django.contrib.auth import (authenticate,logout)
 from django.contrib.auth import login as cslogin
@@ -14,8 +14,19 @@ category_db = client['fake_review']
 
 #dashboard
 def index(res):
-    print()
-    return render(res,'index.html');
+    reviews=Review.objects.all().count()
+    users=User.objects.all().count()
+    products=Products.objects.all().count()
+    orders=Order.objects.all().count()
+    pro=Products.objects.all()
+    dict = {
+        'reviews': reviews,
+        'users':users,
+        'products':products,
+        'orders':orders,
+        'pro':pro,
+        }
+    return render(res,'index.html',context=dict);
 #admin login
 def login(res):
     response_data = {}
@@ -71,6 +82,30 @@ def view_product(res):
     return render(res,'view_product.html',context=dict);
 
 
+def view_orders(res):
+    cat=Order.objects.all()
+       
+    dict = {
+        'dict': cat
+        }
+    return render(res,'view_orders.html',context=dict);
+
+def order_details(res,id):
+    cat=Order_items.objects.filter(order_code=id)
+       
+    dict = {
+        'dict': cat
+        }
+    return render(res,'order_details.html',context=dict);
+
+def change_order(res):
+    if res.method=="POST":
+        order=Order.objects.filter(order_code=res.POST.get('order_code'))
+        order.update(status=res.POST.get('order_status'))
+       
+        return HttpResponseRedirect("/su/view/orders")
+
+
 def delete_product(res,id):
     cat=Products.objects.get(id=id)
     cat.delete()
@@ -96,3 +131,18 @@ def category_delete(res,id):
     cat.delete()
     return HttpResponseRedirect("/su/category")
 
+
+
+def view_users(res):
+    cat=User.objects.all()
+    dict = {
+        'dict': cat
+        }
+    return render(res,'view_users.html',context=dict)
+
+def view_review(res):
+    cat=Review.objects.all()
+    dict = {
+        'dict': cat
+        }
+    return render(res,'view_review.html',context=dict)
