@@ -166,8 +166,12 @@ def product_review(res):
         text = res.POST.get('subject')
         blob = TextBlob(text)
         sentiment_score = blob.sentiment.polarity
-        flag= Review.objects.filter(user_id=res.POST.get('user_id')).count()
-        if flag > 0:
+        flag= Review.objects.filter(user_id=res.POST.get('user_id'),product_id=res.POST.get('product_id')).count()
+        if  sentiment_score > 0.9 and blob.sentiment.subjectivity > 0.6:
+            return JsonResponse({'success': 'Suspicious review detected'})
+        elif sentiment_score == 0 or blob.sentiment.subjectivity == 0:
+            return JsonResponse({'success': 'Dont write fake Review'})
+        elif flag > 0:
             return JsonResponse({'success': 'Your have already done your Review'})
         else:
             product = get_object_or_404(Products, id=res.POST.get('product_id'))
@@ -176,6 +180,7 @@ def product_review(res):
                                         rating=res.POST.get('rating'),
                                         message=res.POST.get('subject'),
                                         status=sentiment_score,
+                                        subject=blob.sentiment.subjectivity,
                                         )
             review.save()
             return JsonResponse({'success': 'Thank for your Review'})
