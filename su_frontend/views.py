@@ -175,8 +175,9 @@ def product_review(res):
             return JsonResponse({'success': 'Your have already done your Review'})
         else:
             product = get_object_or_404(Products, id=res.POST.get('product_id'))
+            user = get_object_or_404(User, id=res.POST.get('user_id'))
             review=Review.objects.create(product=product,
-                                        user_id=res.POST.get('user_id'),
+                                        user_id= user,
                                         rating=res.POST.get('rating'),
                                         message=res.POST.get('subject'),
                                         status=sentiment_score,

@@ -1,6 +1,6 @@
 import os
 from djongo import models
-
+from django.contrib.auth.models import User
 
 
 class Category(models.Model):
@@ -38,7 +38,7 @@ class Order_items(models.Model):
 
 class Review(models.Model):
     product = models.ForeignKey(Products, on_delete=models.CASCADE)
-    user_id=models.CharField(max_length=255, default=None)
+    user_id=models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.CharField(max_length=255,default=None)
     status = models.CharField(max_length=255,default=None)
     rating = models.CharField(max_length=255,default=None)
