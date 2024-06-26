@@ -565,12 +565,7 @@
                   {% for r in review %}
                   <div class="review_item">
                     <div class="media">
-                      <div class="d-flex">
-                        <img
-                          src="{% static 'img/product/review-1.png' %}"
-                          alt=""
-                        />
-                      </div>
+                      
                       <div class="media-body">
                         <h4>{{r.user_id}}</h4>
                         {% if r.rating == 1 %}
@@ -781,7 +776,7 @@
     {% endif %}
     <script src="{% static 'vendors2/jquery/jquery-3.2.1.min.js' %}"></script>
     <script src="{% static 'vendors2/bootstrap/bootstrap.bundle.min.js' %}"></script>
-    {% comment %} <script src="{% static 'vendors2/skrollr.min.js' %}"></script> {% endcomment %}
+    <script src="{% static 'vendors2/skrollr.min.js' %}"></script>
     <script src="{% static 'vendors2/owl-carousel/owl.carousel.min.js' %}"></script>
     <script src="{% static 'vendors2/nice-select/jquery.nice-select.min.js' %}"></script>
     <script src="{% static 'vendors2/jquery.ajaxchimp.min.js' %}"></script>
@@ -810,7 +805,7 @@
                         icon: "success"
                       });
                       console.log(response); 
-                      {% comment %} window.location.reload(); {% endcomment %}
+                      window.location.reload();
                 }, 
                 error: function (xhr, status, error) {                        
                     Swal.fire({

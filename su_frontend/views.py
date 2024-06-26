@@ -90,7 +90,7 @@ def front_signup(request):
 
 def product_detail(res,id):
     cart=Products.objects.filter(id=id);
-    review=Review.objects.filter(product_id=id)
+    review=Review.objects.filter(product_id=id,delete_status=0)
     cart_data={
     'cart':cart,
     'review':review
@@ -167,12 +167,35 @@ def product_review(res):
         blob = TextBlob(text)
         sentiment_score = blob.sentiment.polarity
         flag= Review.objects.filter(user_id=res.POST.get('user_id'),product_id=res.POST.get('product_id')).count()
-        if  sentiment_score > 0.9 and blob.sentiment.subjectivity > 0.6:
-            return JsonResponse({'success': 'Suspicious review detected'})
-        elif sentiment_score == 0 or blob.sentiment.subjectivity == 0:
-            return JsonResponse({'success': 'Dont write fake Review'})
-        elif flag > 0:
+        if flag > 2:
             return JsonResponse({'success': 'Your have already done your Review'})
+        elif  sentiment_score > 0.9 and blob.sentiment.subjectivity > 0.6:
+             product = get_object_or_404(Products, id=res.POST.get('product_id'))
+             user = get_object_or_404(User, id=res.POST.get('user_id'))
+             review=Review.objects.create(product=product,
+                                        user_id= user,
+                                        rating=res.POST.get('rating'),
+                                        message=res.POST.get('subject'),
+                                        status=sentiment_score,
+                                        subject=blob.sentiment.subjectivity,
+                                        delete_status=1
+                                        )
+             review.save()
+             return JsonResponse({'success': 'Thank for your Review'})
+        elif sentiment_score == 0 or blob.sentiment.subjectivity == 0:
+             product = get_object_or_404(Products, id=res.POST.get('product_id'))
+             user = get_object_or_404(User, id=res.POST.get('user_id'))
+             review=Review.objects.create(product=product,
+                                        user_id= user,
+                                        rating=res.POST.get('rating'),
+                                        message=res.POST.get('subject'),
+                                        status=sentiment_score,
+                                        subject=blob.sentiment.subjectivity,
+                                        delete_status=1
+                                        )
+             review.save()  
+             return JsonResponse({'success': 'Thank for your Review'})
+       
         else:
             product = get_object_or_404(Products, id=res.POST.get('product_id'))
             user = get_object_or_404(User, id=res.POST.get('user_id'))
@@ -182,6 +205,7 @@ def product_review(res):
                                         message=res.POST.get('subject'),
                                         status=sentiment_score,
                                         subject=blob.sentiment.subjectivity,
+                                        delete_status=0
                                         )
             review.save()
             return JsonResponse({'success': 'Thank for your Review'})

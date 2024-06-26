@@ -43,6 +43,7 @@ class Review(models.Model):
     status = models.CharField(max_length=255,default=None)
     rating = models.CharField(max_length=255,default=None)
     subject=models.CharField(max_length=255,default=None)
+    delete_status=models.CharField(max_length=255,default=None)
 
 class Order(models.Model):
       order_code = models.CharField(max_length=20,default=None)
